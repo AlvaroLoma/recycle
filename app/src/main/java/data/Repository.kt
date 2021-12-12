@@ -9,4 +9,5 @@ interface Repository {
     fun addStudent(student: Student)
     fun updateStudent(newStudent: Student)
     fun deleteStudent(student: Student)
+    fun deleteAllStudents()
 }

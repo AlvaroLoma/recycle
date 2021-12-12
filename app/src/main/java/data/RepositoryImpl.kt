@@ -39,6 +39,11 @@ object RepositoryImpl : Repository {
         }
     }
 
+    override fun deleteAllStudents() {
+        students.clear()
+        updateStudentLiveData()
+    }
+
     private fun updateStudentLiveData() {
         studentsLiveData.value = ArrayList<Student>(students)
     }
