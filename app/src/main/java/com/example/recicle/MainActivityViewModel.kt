@@ -15,6 +15,15 @@ class MainActivityViewModel(val repository: Repository): ViewModel() {
 
     }
 
+    fun editStudent(student: Student) {
+        val newStudent = student.copy(age=student.age+1)
+        repository.updateStudent(newStudent)
+    }
+
+    fun deleteStudent(student: Student) {
+
+        repository.deleteStudent(student)
+    }
 
 
 }

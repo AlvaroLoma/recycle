@@ -69,7 +69,11 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
             init {
                 //binding.clRoot.setOnClickListener { onItemClickListener?.invoke(adapterPosition) }
                 binding.buttonEdit.setOnClickListener{
-                    onEditClickListener1?.invoke(adapterPosition)
+                    val position = bindingAdapterPosition
+                    if(position!=RecyclerView.NO_POSITION){
+                        onEditClickListener1?.invoke(position)
+                    }
+
                 }
                 binding.buttonDelete.setOnClickListener{
                     onDeleteClickListener1?.invoke(adapterPosition)

@@ -38,12 +38,14 @@ class MainActivity : AppCompatActivity() {
     }
     private val listAdapter: MainActivityAdapter = MainActivityAdapter().also {
         it.onEditClickListener1={ position->
-            showStudent(position)
+            editStudent(position)
         }
         it.onDeleteClickListener1={ position->
-            showStudent(position)
+            deleteStudent(position)
         }
     }
+
+
 
 
     private val viewModel: MainActivityViewModel by viewModels{
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupViews()
         observeStudents()
-        addFakeStudent()
+        addFakeStudent()//PRUEBA TU NI CASO
 
     }
 
@@ -93,5 +95,12 @@ class MainActivity : AppCompatActivity() {
     private fun showStudent(position: Int) {
         val student: Student= listAdapter.getStudent(position)
         Toast.makeText(this,student.name,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun editStudent(position: Int) {
+        viewModel.editStudent(listAdapter.getStudent(position))
+    }
+    private fun deleteStudent(position: Int) {
+        viewModel.deleteStudent(listAdapter.getStudent(position))
     }
 }

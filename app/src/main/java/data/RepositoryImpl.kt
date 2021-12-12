@@ -20,6 +20,26 @@ object RepositoryImpl : Repository {
 
    override fun addStudent(student: Student){
         students.add(student)
+       updateStudentLiveData()
+    }
+
+    override fun updateStudent(newStudent: Student) {
+        val position = students.indexOfFirst { it.id==newStudent.id }//busca el estudiante
+        if(position>=0){//si es mayor que -1 es que lo encontro
+            students.set(position,newStudent)//machaca la posicion
+             updateStudentLiveData()//aviso de cambios
+        }
+    }
+
+    override fun deleteStudent(student: Student) {
+        val position = students.indexOfFirst { it.id==student.id }//busca el estudiante
+        if(position>=0){//si es mayor que -1 es que lo encontro
+            students.removeAt(position)//borra esa posicion
+            updateStudentLiveData()//aviso de cambios
+        }
+    }
+
+    private fun updateStudentLiveData() {
         studentsLiveData.value = ArrayList<Student>(students)
     }
 }
