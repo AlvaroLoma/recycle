@@ -2,11 +2,15 @@ package com.example.recicle
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recicle.databinding.ActivityMainBinding
+import data.RepositoryImpl
+import data.entity.Student
 
 class MainActivity : AppCompatActivity() {
     /*
@@ -17,6 +21,13 @@ class MainActivity : AppCompatActivity() {
             3 - una clase adapter : ver MainActivityAdapter, la cual tendra mi lista de datos
             4 -Un metodo para configurar el recycleView: setupRecycleView()
 
+        CON VIEWMODEL
+
+            1-Creo mi clase viewModel
+            2- Para pasarle la base de datos creo que viewModelFactory
+            3- Creo mi variable viewModel con su lazy propio
+            4- obeservo la lista de datos desde aqui con mi viewModel
+
      */
 
 
@@ -25,10 +36,33 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     private val listAdapter: MainActivityAdapter = MainActivityAdapter()
+
+
+    private val viewModel: MainActivityViewModel by viewModels{
+        MainActivityViewModelFactory(RepositoryImpl)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupViews()
+        observeStudents()
+        addFakeStudent()
+
+    }
+
+    private fun addFakeStudent() {
+        viewModel.addStudent( Student(5,"pepito",22))
+    }
+
+    private fun observeStudents() {
+        viewModel.students.observe(this,){
+            updateList(it)
+        }
+    }
+
+    private fun updateList(newList: List<Student>) {
+        listAdapter.submitList(newList)
+        binding.lblEmptyView.visibility = if (newList.isEmpty()) View.VISIBLE else View.INVISIBLE
     }
 
     private fun setupViews() {

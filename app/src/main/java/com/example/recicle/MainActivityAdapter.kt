@@ -23,6 +23,16 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
 
     private var data: List<Student> = emptyList();
 
+
+    init {//ides de los objetos de la lista son estables, porque son longs
+        setHasStableIds(true)
+    }
+    //ids estables
+    override fun getItemId(position: Int): Long {
+        return data[position].id
+    }
+
+
     //avisa al adaptador de crear un nuevo viewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //parent = recycleView
