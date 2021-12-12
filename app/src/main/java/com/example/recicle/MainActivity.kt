@@ -3,6 +3,7 @@ package com.example.recicle
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -35,7 +36,14 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val listAdapter: MainActivityAdapter = MainActivityAdapter()
+    private val listAdapter: MainActivityAdapter = MainActivityAdapter().also {
+        it.onEditClickListener1={ position->
+            showStudent(position)
+        }
+        it.onDeleteClickListener1={ position->
+            showStudent(position)
+        }
+    }
 
 
     private val viewModel: MainActivityViewModel by viewModels{
@@ -79,5 +87,11 @@ class MainActivity : AppCompatActivity() {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             adapter = listAdapter
         }
+    }
+
+
+    private fun showStudent(position: Int) {
+        val student: Student= listAdapter.getStudent(position)
+        Toast.makeText(this,student.name,Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,7 +1,6 @@
 package com.example.recicle
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recicle.databinding.MainItemBinding
@@ -23,6 +22,8 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
 
     private var data: List<Student> = emptyList();
 
+    var onEditClickListener1: ((Int)-> Unit)?=null
+    var onDeleteClickListener1: ((Int)-> Unit)?=null
 
     init {//ides de los objetos de la lista son estables, porque son longs
         setHasStableIds(true)
@@ -31,6 +32,8 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
     override fun getItemId(position: Int): Long {
         return data[position].id
     }
+
+
 
 
     //avisa al adaptador de crear un nuevo viewHolder
@@ -55,9 +58,23 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
         notifyDataSetChanged()//avisa que la fuente de datos cambio
 
     }
-    class ViewHolder(private val binding: MainItemBinding):
-        RecyclerView.ViewHolder(binding.root) {
 
+    fun getStudent(position: Int): Student {
+        return data[position]
+
+    }
+
+     inner class ViewHolder(private val binding: MainItemBinding):
+        RecyclerView.ViewHolder(binding.root) {
+            init {
+                //binding.clRoot.setOnClickListener { onItemClickListener?.invoke(adapterPosition) }
+                binding.buttonEdit.setOnClickListener{
+                    onEditClickListener1?.invoke(adapterPosition)
+                }
+                binding.buttonDelete.setOnClickListener{
+                    onDeleteClickListener1?.invoke(adapterPosition)
+                }
+            }
             fun bind(student: Student){
                 binding.lblName.text=student.name
                 //binding.lblAge.text=itemView.context.resources.getQuantityString(R.plurals.main_item_age,age,age)
@@ -65,6 +82,8 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
             }
 
     }
+
+
 
 }
 
