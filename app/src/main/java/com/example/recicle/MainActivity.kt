@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recicle.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import data.RepositoryImpl
 import data.entity.Student
 
@@ -94,7 +95,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStudent(position: Int) {
         val student: Student= listAdapter.currentList[position]
-        Toast.makeText(this,student.name,Toast.LENGTH_SHORT).show()
+        Snackbar.make(binding.lstStudents,"borrado",Snackbar.LENGTH_LONG)
+            .setAction("texto boton"){
+                viewModel.addStudent(student)
+            }
+            .show()
     }
 
     private fun editStudent(position: Int) {
