@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">recicle</string>
+    <string name="main_lblEmptyView">"sin datos "</string>
+</resources>
