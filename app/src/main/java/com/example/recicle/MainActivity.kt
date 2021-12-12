@@ -93,14 +93,14 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showStudent(position: Int) {
-        val student: Student= listAdapter.getStudent(position)
+        val student: Student= listAdapter.currentList[position]
         Toast.makeText(this,student.name,Toast.LENGTH_SHORT).show()
     }
 
     private fun editStudent(position: Int) {
-        viewModel.editStudent(listAdapter.getStudent(position))
+        viewModel.editStudent(listAdapter.currentList[position])
     }
     private fun deleteStudent(position: Int) {
-        viewModel.deleteStudent(listAdapter.getStudent(position))
+        viewModel.deleteStudent(listAdapter.currentList[position])
     }
 }

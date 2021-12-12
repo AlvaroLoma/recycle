@@ -2,11 +2,13 @@ package com.example.recicle
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recicle.databinding.MainItemBinding
 import data.entity.Student
 
-class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder>() {
+class MainActivityAdapter(): ListAdapter<Student,MainActivityAdapter.ViewHolder>(studentDiffCallback) {//clase interna que o creo
     /*
 
         Como hacer un adapter:
@@ -20,21 +22,9 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
 
      */
 
-    private var data: List<Student> = emptyList();
 
-    var onEditClickListener1: ((Int)-> Unit)?=null
+    var onEditClickListener1: ((Int)-> Unit)?=null  //OJO EN LOS APUNTES SE HACE DE OTRA FORMA
     var onDeleteClickListener1: ((Int)-> Unit)?=null
-
-    init {//ides de los objetos de la lista son estables, porque son longs
-        setHasStableIds(true)
-    }
-    //ids estables
-    override fun getItemId(position: Int): Long {
-        return data[position].id
-    }
-
-
-
 
     //avisa al adaptador de crear un nuevo viewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,23 +36,10 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
     }
     //me da la posicion que se tiene que pintar
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val student = data[position]
+        val student = currentList[position]
         holder.bind(student)
     }
 
-    override fun getItemCount(): Int = data.size
-
-    //actualizar la lista
-    fun submitList(newList :List<Student>){
-        data = newList
-        notifyDataSetChanged()//avisa que la fuente de datos cambio
-
-    }
-
-    fun getStudent(position: Int): Student {
-        return data[position]
-
-    }
 
      inner class ViewHolder(private val binding: MainItemBinding):
         RecyclerView.ViewHolder(binding.root) {
@@ -84,6 +61,21 @@ class MainActivityAdapter(): RecyclerView.Adapter<MainActivityAdapter.ViewHolder
                 //binding.lblAge.text=itemView.context.resources.getQuantityString(R.plurals.main_item_age,age,age)
                 binding.lblAge.text=student.age.toString()
             }
+
+    }
+
+
+    object studentDiffCallback: DiffUtil.ItemCallback<Student> (){
+
+        //son iguales?
+        override fun areItemsTheSame(oldItem: Student, newItem: Student): Boolean
+                = oldItem.id== newItem.id
+
+        //mismos datos?
+        override fun areContentsTheSame(oldItem: Student, newItem: Student): Boolean =
+            oldItem==newItem //compara todos los datos HASTA LOS QUE NO SE VEN
+        //SE PUEDE HACER UNO POR UNO USANDO EL &&
+
 
     }
 

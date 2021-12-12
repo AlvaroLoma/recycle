@@ -12,7 +12,7 @@ object RepositoryImpl : Repository {
         Student(3, "Rodolfo", 22)
     )
     //variable que mis clases observan desde fuera para avisar de los cambios
-    private val studentsLiveData : MutableLiveData<List<Student>> = MutableLiveData(students)
+    private val studentsLiveData : MutableLiveData<List<Student>> = MutableLiveData(students.toList())
 
     override fun queryAllStudents(): LiveData<List<Student>> {
         return studentsLiveData
@@ -45,6 +45,6 @@ object RepositoryImpl : Repository {
     }
 
     private fun updateStudentLiveData() {
-        studentsLiveData.value = ArrayList<Student>(students)
+        studentsLiveData.value = students.toList()
     }
 }
