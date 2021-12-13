@@ -10,4 +10,5 @@ interface Repository {
     fun updateStudent(newStudent: Student)
     fun deleteStudent(student: Student)
     fun deleteAllStudents()
+    fun queryMayores() :LiveData<List<Student>>
 }

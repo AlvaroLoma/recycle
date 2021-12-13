@@ -3,7 +3,6 @@ package com.example.recicle
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -13,6 +12,7 @@ import com.example.recicle.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import data.RepositoryImpl
 import data.entity.Student
+import util.observeEvent
 
 class MainActivity : AppCompatActivity() {
     /*
@@ -50,15 +50,34 @@ class MainActivity : AppCompatActivity() {
 
 
     private val viewModel: MainActivityViewModel by viewModels{
-        MainActivityViewModelFactory(RepositoryImpl)
+        MainActivityViewModelFactory(RepositoryImpl, application)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupViews()
-        observeStudents()
+        obverveViewModelData()
         addFakeStudent()//PRUEBA TU NI CASO
 
+    }
+
+    private fun obverveViewModelData() {
+        observeStudents()
+        observeMessages()
+        obverveEmptyView()
+    }
+
+    private fun obverveEmptyView() {
+        viewModel.lblEmtyViewVisibility.observe(this){
+            binding.lblEmptyView.visibility=it
+        }
+    }
+
+    private fun observeMessages() {
+        viewModel.onShowMessage.observeEvent(this){
+            Snackbar.make(binding.lstStudents,it,Snackbar.LENGTH_SHORT).show()
+
+        }
     }
 
     private fun addFakeStudent() {
@@ -73,11 +92,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateList(newList: List<Student>) {
         listAdapter.submitList(newList)
-        binding.lblEmptyView.visibility = if (newList.isEmpty()) View.VISIBLE else View.INVISIBLE
+        //binding.lblEmptyView.visibility = if (newList.isEmpty()) View.VISIBLE else View.INVISIBLE
     }
 
     private fun setupViews() {
         setupRecycleView()
+        binding.btnMayores.setOnClickListener{ viewModel.getMayores()}
     }
 
     private fun setupRecycleView() {
